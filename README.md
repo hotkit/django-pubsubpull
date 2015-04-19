@@ -6,6 +6,7 @@ In practice what we'll end up with is along the lines of:
 
 * Use Django slumber and async to provide a load of basic infrastructure this is going to need.
 * Provide new models for tracking database level changes to certain tables (models), and database triggers to ensure that they are properly recorded.
+* All operations will be based on HTTP using GET, PUT and DELETE only.
 * Django middleware to capture as much information about the request and the underlying changes we can and to tie that in to the records of database changes recorded there.
 * Support for Django 1.0 through 1.7. We may support 1.8 and later if we can make our middleware subsume the functionality of the old transaction middleware.
 * Only support Postgres 9.4 and later.
