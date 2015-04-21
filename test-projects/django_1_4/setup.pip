@@ -1,1 +1,4 @@
 django < 1.5
+south>1.0
+
+django-nose

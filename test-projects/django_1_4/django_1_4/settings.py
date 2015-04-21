@@ -113,6 +113,8 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'south',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -124,8 +126,21 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 
+    'django_nose',
+
     'pubsubpull',
 )
+
+# Needed to get the Django nose test runner working
+TEST_RUNNER='django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-erase',
+    '--cover-branches',
+    '--cover-package=async',
+    '--cover-html', '--cover-html-dir=../../coverage',
+]
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
