@@ -4,6 +4,7 @@ python:
     - "2.7"
 
 env:
+    - DJANGO=1_0
     - DJANGO=1_4
     - DJANGO=1_7
 
