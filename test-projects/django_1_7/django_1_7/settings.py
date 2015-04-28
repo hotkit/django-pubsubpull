@@ -70,14 +70,6 @@ DATABASES = {
 # Needed to get the Django nose test runner working
 TEST_RUNNER='django_nose.NoseTestSuiteRunner'
 
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-erase',
-    '--cover-branches',
-    '--cover-package=pubsubpull',
-    '--cover-html', '--cover-html-dir=../../coverage',
-]
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
