@@ -15,3 +15,8 @@ workon pubsubpull_1.4
 cd test-projects/django_1_4
 echo Django 1.4
 check_worked python -tt manage.py test pubsubpull
+
+workon pubsubpull_1.7
+cd ../django_1_7
+echo Django 1.7
+check_worked python manage.py test pubsubpull
