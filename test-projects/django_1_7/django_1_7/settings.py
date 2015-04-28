@@ -36,6 +36,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_nose',
+
+    'pubsubpull',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,10 +62,21 @@ WSGI_APPLICATION = 'django_1_7.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'pubsubpull',
     }
 }
+
+# Needed to get the Django nose test runner working
+TEST_RUNNER='django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-erase',
+    '--cover-branches',
+    '--cover-package=pubsubpull',
+    '--cover-html', '--cover-html-dir=../../coverage',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
