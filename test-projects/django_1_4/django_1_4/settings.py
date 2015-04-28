@@ -142,7 +142,7 @@ NOSE_ARGS = [
     '--with-coverage',
     '--cover-erase',
     '--cover-branches',
-    '--cover-package=async',
+    '--cover-package=pubsubpull',
     '--cover-html', '--cover-html-dir=../../coverage',
 ]
 
