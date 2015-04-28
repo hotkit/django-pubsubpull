@@ -20,3 +20,8 @@ workon pubsubpull_1.7
 cd ../django_1_7
 echo Django 1.7
 check_worked python manage.py test pubsubpull
+
+workon pubsubpull_1.0
+cd ../django_1_0
+echo Django 1.0
+check_worked python manage.py test pubsubpull
