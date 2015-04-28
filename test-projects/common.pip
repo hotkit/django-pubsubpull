@@ -1,0 +1,9 @@
+simplejson
+psycopg2
+
+# Used for testing
+coverage
+mock
+
+git+https://github.com/KayEss/django-async.git@develop
+git+https://github.com/KayEss/django-slumber.git@develop

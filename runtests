@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+cd `dirname $0`
+
+source virtualenvwrapper.sh
+
+# virtualenvwrapper doesn't work with "set -e
+function check_worked {
+    if ! $*
+    then
+        exit 1
+    fi
+}
+
+workon pubsubpull_1.4
+cd test-projects/django_1_4
+echo Django 1.4
+check_worked python -tt manage.py test pubsubpull
