@@ -2,10 +2,10 @@
 cd `dirname $0`
 source virtualenvwrapper.sh
 
-# mkvirtualenv async_1.0
-# pip install -U -r common.pip -r django_1_0/setup.pip
-# pip freeze
-# deactivate
+mkvirtualenv pubsubpull_1.0
+pip install -U -r common.pip -r django_1_0/setup.pip
+pip freeze
+deactivate
 
 mkvirtualenv pubsubpull_1.4
 pip install -U -r common.pip -r django_1_4/setup.pip
