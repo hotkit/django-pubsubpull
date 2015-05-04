@@ -13,9 +13,8 @@ except ImportError: # pragma: no cover
     from datetime import datetime as timezone
 
 
-def pull_monitor(model, callback):
+def pull_monitor(model, callback, delay=dict(minutes=1)):
     """Used to look for instances that need to be pulled.
     """
-    now = timezone.now()
-    later = now + timedelta(minutes=1)
-    schedule('pubsubpull.async.pull_monitor', run_after=later, args=[model, callback])
+    run_after = timezone.now() + timedelta(**delay)
+    schedule('pubsubpull.async.pull_monitor', run_after=run_after, args=[model, callback])
