@@ -33,5 +33,20 @@ class TestPullStarts(TestCase):
         pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
         management.call_command('flush_queue')
-        self.assertEquals(Job.objects.count(), 3)
+        for j in Job.objects.all():
+            print j.id, j, j.executed, j.scheduled
+        self.assertEquals(Job.objects.count(), 4)
         self.assertIn(data_link(pizza), self.URLS)
+
+    def test_pull_eleven(self):
+        pizzas = []
+        for p in range(1, 12):
+            pizzas.append(Pizza.objects.create(name="Pizza %s" % p))
+        pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
+        self.assertEquals(Job.objects.count(), 1)
+        management.call_command('flush_queue')
+        for j in Job.objects.all().order_by('pk'):
+            print j.id, j, j.executed, j.scheduled
+        self.assertEquals(Job.objects.count(), 15)
+        for p in pizzas:
+            self.assertIn(data_link(p), self.URLS)

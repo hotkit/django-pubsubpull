@@ -15,12 +15,26 @@ except ImportError: # pragma: no cover
     from datetime import datetime as timezone
 
 
-def pull_monitor(model_url, callback, delay=dict(minutes=1)):
+def pull_monitor(model_url, callback, delay=dict(minutes=1),
+        page_url=None, floor=0):
     """Used to look for instances that need to be pulled.
+
+    This only works with models who use an auto-incremented primary key.
     """
-    model = get_model(model_url)
-    _, json = get(model._operations['instances'])
+    if not page_url:
+        model = get_model(model_url)
+        instances_url = model._operations['instances']
+    else:
+        instances_url = page_url
+    _, json = get(instances_url or page_url)
+    latest = None
     for item in json['page']:
+        latest = item['pk']
         schedule(callback, args=[item['data']])
-    run_after = timezone.now() + timedelta(**delay)
-    schedule('pubsubpull.async.pull_monitor', run_after=run_after, args=[model_url, callback])
+    if json.has_key('next_page'):
+        schedule('pubsubpull.async.pull_monitor', args=[model_url, callback],
+            kwargs=dict(delay=delay, page_url=json['next_page']))
+    if not page_url:
+        run_after = timezone.now() + timedelta(**delay)
+        schedule('pubsubpull.async.pull_monitor', run_after=run_after,
+            args=[model_url, callback], kwargs=dict(delay=delay))
