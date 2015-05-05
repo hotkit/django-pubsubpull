@@ -132,6 +132,7 @@ INSTALLED_APPS = (
 
     'django_nose',
     'async',
+    'slumber_examples',
 
     'pubsubpull',
 )

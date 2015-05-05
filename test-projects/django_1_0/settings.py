@@ -78,6 +78,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 
     'async',
+    'slumber_examples',
 
     'pubsubpull',
 
