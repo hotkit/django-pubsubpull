@@ -12,6 +12,7 @@ from slumber_examples.models import Pizza
 
 
 def job(url):
+    assert url not in TestPullStarts.URLS
     TestPullStarts.URLS.add(url)
 
 
@@ -26,6 +27,13 @@ class TestPullStarts(TestCase):
         urls = [data_link(p) for p in pizzas]
         self.assertEquals(set(urls), self.URLS)
 
+    def print_jobs(self, jobs=None):
+        if not jobs:
+            jobs = Job.objects.all()
+        print "*** %s jobs ***" % jobs.count()
+        for j in jobs.order_by('pk'):
+            print j.id, j, j.executed, j.scheduled
+
     def test_empty_pull(self):
         pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
@@ -37,8 +45,6 @@ class TestPullStarts(TestCase):
         pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
         management.call_command('flush_queue')
-        for j in Job.objects.all():
-            print j.id, j, j.executed, j.scheduled
         self.assertEquals(Job.objects.count(), 4)
         self.check_pizzas([pizza])
 
@@ -49,8 +55,19 @@ class TestPullStarts(TestCase):
         pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
         management.call_command('flush_queue')
-        for j in Job.objects.all().order_by('pk'):
-            print j.id, j, j.executed, j.scheduled
         self.assertEquals(Job.objects.count(), 15)
         self.check_pizzas(pizzas)
         return pizzas
+
+    def test_pull_eleven_then_eleven(self):
+        pizzas = self.test_pull_eleven()
+        for p in range(12, 23):
+            pizzas.append(Pizza.objects.create(name="Pizza %s" % p))
+        print "*** -- dropping scheduled time on jobs to force execution"
+        Job.objects.exclude(scheduled=None).update(scheduled=None)
+        management.call_command('flush_queue')
+        self.print_jobs()
+        self.print_jobs(Job.objects.exclude(scheduled=None))
+        self.print_jobs(Job.objects.filter(name='pubsubpull.async.pull_monitor'))
+        self.assertEquals(Job.objects.count(), 28)
+        self.check_pizzas(pizzas)

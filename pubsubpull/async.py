@@ -27,14 +27,18 @@ def pull_monitor(model_url, callback, delay=dict(minutes=1),
     else:
         instances_url = page_url
     _, json = get(instances_url or page_url)
-    latest = None
+    latest, highest = None, floor
     for item in json['page']:
+        highest = max(item['pk'], highest)
         latest = item['pk']
-        schedule(callback, args=[item['data']])
-    if json.has_key('next_page'):
+        if latest > floor:
+            schedule(callback, args=[item['data']])
+    if json.has_key('next_page') and latest > floor:
         schedule('pubsubpull.async.pull_monitor', args=[model_url, callback],
-            kwargs=dict(delay=delay, page_url=json['next_page']))
+            kwargs=dict(delay=delay, floor=floor, page_url=json['next_page']))
+        print "Got another page to process", json['next_page'], floor
     if not page_url:
         run_after = timezone.now() + timedelta(**delay)
         schedule('pubsubpull.async.pull_monitor', run_after=run_after,
-            args=[model_url, callback], kwargs=dict(delay=delay))
+            args=[model_url, callback], kwargs=dict(delay=delay, floor=highest))
+        print "Looking for new instances above", highest
