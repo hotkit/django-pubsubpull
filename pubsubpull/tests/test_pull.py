@@ -13,7 +13,7 @@ def job():
 
 class TestPullStarts(TestCase):
     def test_empty_pull(self):
-        pull('slumber://test/Instance/', 'pubsubpull.tests.test_pull.job')
+        pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
         management.call_command('flush_queue')
         self.assertEquals(Job.objects.count(), 2)
