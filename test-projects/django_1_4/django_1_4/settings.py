@@ -137,6 +137,12 @@ INSTALLED_APPS = (
     'pubsubpull',
 )
 
+# Loop back is fine for testing
+SLUMBER_DIRECTORY = {
+        'pizza': 'http://localhost:8000/slumber/pizza/',
+    }
+SLUMBER_SERVICE = 'pizza'
+
 # Needed to get the Django nose test runner working
 TEST_RUNNER='django_nose.NoseTestSuiteRunner'
 
