@@ -71,3 +71,12 @@ class TestPullStarts(TestCase):
         self.print_jobs(Job.objects.filter(name='pubsubpull.async.pull_monitor'))
         self.assertEquals(Job.objects.count(), 28)
         self.check_pizzas(pizzas)
+        return pizzas
+
+    def test_pull_eleven_then_eleven_then_one(self):
+        pizzas = self.test_pull_eleven_then_eleven()
+        pizzas.append(Pizza.objects.create(name="Four cheeses"))
+        print "*** -- dropping scheduled time on jobs to force execution"
+        Job.objects.exclude(scheduled=None).update(scheduled=None)
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.count(), 30)
