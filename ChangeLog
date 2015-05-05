@@ -1,0 +1,4 @@
+2015-05-05  Kirit Sælensminde  <kirit@felspar.com>
+ Added migrations for South and Django 1.7
+ Added initial version of pull capability
+ Added ChangeLog
