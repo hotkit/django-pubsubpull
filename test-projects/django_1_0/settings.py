@@ -61,6 +61,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'fost_authn.Middleware',
+)
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'fost_authn.FostBackend',
 )
 
 ROOT_URLCONF = 'django_1_0.urls'
@@ -77,7 +82,16 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
 
+    'async',
+    'slumber_examples',
+
     'pubsubpull',
 
     'd1', # Tests
 )
+
+# Loop back is fine for testing
+SLUMBER_DIRECTORY = {
+        'pizza': 'http://localhost:8000/slumber/pizza/',
+    }
+SLUMBER_SERVICE = 'pizza'

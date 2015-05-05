@@ -99,9 +99,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'fost_authn.Middleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'fost_authn.FostBackend',
 )
 
 ROOT_URLCONF = 'django_1_4.urls'
@@ -131,9 +136,17 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 
     'django_nose',
+    'async',
+    'slumber_examples',
 
     'pubsubpull',
 )
+
+# Loop back is fine for testing
+SLUMBER_DIRECTORY = {
+        'pizza': 'http://localhost:8000/slumber/pizza/',
+    }
+SLUMBER_SERVICE = 'pizza'
 
 # Needed to get the Django nose test runner working
 TEST_RUNNER='django_nose.NoseTestSuiteRunner'
