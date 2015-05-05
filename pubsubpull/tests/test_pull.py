@@ -4,6 +4,7 @@ from django.core import management
 from django.test import TestCase
 
 from pubsubpull.api import pull
+from slumber_examples.models import Pizza
 
 
 def job():
@@ -11,8 +12,15 @@ def job():
 
 
 class TestPullStarts(TestCase):
-    def test_pull(self):
+    def test_empty_pull(self):
         pull('slumber://test/Instance/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
         management.call_command('flush_queue')
         self.assertEquals(Job.objects.count(), 2)
+
+    def test_pull_one(self):
+        pizza = Pizza.objects.create(name="Vegetarian")
+        pull('slumber://slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
+        self.assertEquals(Job.objects.count(), 1)
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.count(), 3)
