@@ -22,6 +22,10 @@ class TestPullStarts(TestCase):
             password=settings.SECRET_KEY)
         TestPullStarts.URLS = set()
 
+    def check_pizzas(self, pizzas):
+        urls = [data_link(p) for p in pizzas]
+        self.assertEquals(set(urls), self.URLS)
+
     def test_empty_pull(self):
         pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
@@ -36,7 +40,7 @@ class TestPullStarts(TestCase):
         for j in Job.objects.all():
             print j.id, j, j.executed, j.scheduled
         self.assertEquals(Job.objects.count(), 4)
-        self.assertIn(data_link(pizza), self.URLS)
+        self.check_pizzas([pizza])
 
     def test_pull_eleven(self):
         pizzas = []
@@ -48,5 +52,5 @@ class TestPullStarts(TestCase):
         for j in Job.objects.all().order_by('pk'):
             print j.id, j, j.executed, j.scheduled
         self.assertEquals(Job.objects.count(), 15)
-        for p in pizzas:
-            self.assertIn(data_link(p), self.URLS)
+        self.check_pizzas(pizzas)
+        return pizzas
