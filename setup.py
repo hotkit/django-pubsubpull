@@ -10,7 +10,7 @@ def read(fname1, fname2):
 
 setup(
     name = "django-pubsubpull",
-    version = "0.0.0.2",
+    version = "0.0.0.3",
     author = "Kirit Saelensminde",
     author_email = "kirit@felspar.com",
     url='https://github.com/KayEss/django-pubsubpull',
@@ -19,7 +19,8 @@ setup(
     license = "Boost Software License - Version 1.0 - August 17th, 2003",
     keywords = "django rest data pub-sub pull",
     packages = [
-        'pubsubpull', 'pubsubpull.operations', 'pubsubpull.tests'],
+        'pubsubpull', 'pubsubpull.operations', 'pubsubpull.tests',
+        'pubsubpull.migrations', 'pubsubpull.south_migrations'],
     install_requires = [
         'django-slumber', 'django-async'],
     classifiers = [
