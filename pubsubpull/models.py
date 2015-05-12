@@ -27,3 +27,12 @@ class UpdateLog(models.Model):
 
     def save(self, **kw):
         raise ValidationError("Instances of this class cannot be using Django")
+
+    def __unicode__(self):
+        if self.old and self.new:
+            type = "UPDATE"
+        elif self.old:
+            type = "DELETE"
+        else:
+            type = "INSERT"
+        return u"%s %s @ %s" % (type, self.table, self.when)
