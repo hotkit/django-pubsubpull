@@ -5,14 +5,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 
-
-class JSONB(models.Field):
-    """Simplest possible JSONB wrapper.
-    """
-    description = "Postgres 9.4 JSONB field type"
-
-    def db_type(self, connection=None):
-        return "JSONB"
+from pubsubpull.fields import JSONB
 
 
 class Request(models.Model):
