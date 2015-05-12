@@ -23,6 +23,7 @@ def change_detect(model):
     """
     cursor = connection.cursor()
     sql = file(_join_with_project_path("trigger-attach.sql")).read()
+    sql = sql.format(db_table=model._meta.db_table)
     cursor.execute(sql)
 
 
