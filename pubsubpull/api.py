@@ -4,6 +4,17 @@
 from __future__ import absolute_import
 
 from async.api import schedule
+from django.db import connection
+
+from pubsubpull import _join_with_project_path
+
+
+def change_detect(model):
+    """Enable change detection on the requested model.
+    """
+    cursor = connection.cursor()
+    sql = file(_join_with_project_path("trigger-attach.sql")).read()
+    cursor.execute(sql)
 
 
 def pull(model, callback, **kwargs):
