@@ -1,13 +1,16 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from pubsubpull.api import change_detect
+from pubsubpull.api import add_trigger_function, change_detect
 from pubsubpull.models import UpdateLog
 
 from slumber_examples.models import Pizza
 
 
 class TestTrigger(TestCase):
+    def setUp(self):
+        add_trigger_function()
+
     def test_cannot_save(self):
         with self.assertRaises(ValidationError):
             UpdateLog.objects.create()

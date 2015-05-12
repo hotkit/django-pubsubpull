@@ -1,6 +1,8 @@
 """
     Custom fields
 """
+import json
+
 from django.db import models
 
 
@@ -8,9 +10,18 @@ class JSONB(models.Field):
     """Simplest possible JSONB wrapper.
     """
     description = "Postgres 9.4 JSONB field type"
+    __metaclass__ = models.SubfieldBase
 
     def db_type(self, connection=None):
         return "JSONB"
+
+    def to_python(self, value):
+        if not value:
+            return None
+        elif type(value) != dict:
+            return json.loads(value)
+        else:
+            return value
 
 
 try:
