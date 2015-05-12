@@ -8,6 +8,21 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Deleting model 'Subscription'
+        db.delete_table('pubsubpull_subscription')
+
+        # Adding model 'UpdateLog'
+        db.create_table('pubsubpull_updatelog', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('table', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('when', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('request', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='changes', null=True, to=orm['pubsubpull.Request'])),
+            ('old', self.gf('pubsubpull.fields.JSONB')(null=True, blank=True)),
+            ('new', self.gf('pubsubpull.fields.JSONB')(null=True, blank=True)),
+        ))
+        db.send_create_signal('pubsubpull', ['UpdateLog'])
+
         # Adding model 'Request'
         db.create_table('pubsubpull_request', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -15,34 +30,19 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('pubsubpull', ['Request'])
 
-        # Adding field 'UpdateLog.request'
-        db.add_column('pubsubpull_updatelog', 'request',
-                      self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='changes', null=True, to=orm['pubsubpull.Request']),
-                      keep_default=False)
-
-        # Adding field 'UpdateLog.old'
-        db.add_column('pubsubpull_updatelog', 'old',
-                      self.gf('pubsubpull.fields.JSONB')(null=True, blank=True),
-                      keep_default=False)
-
-        # Adding field 'UpdateLog.new'
-        db.add_column('pubsubpull_updatelog', 'new',
-                      self.gf('pubsubpull.fields.JSONB')(null=True, blank=True),
-                      keep_default=False)
-
 
     def backwards(self, orm):
+        # Adding model 'Subscription'
+        db.create_table('pubsubpull_subscription', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal('pubsubpull', ['Subscription'])
+
+        # Deleting model 'UpdateLog'
+        db.delete_table('pubsubpull_updatelog')
+
         # Deleting model 'Request'
         db.delete_table('pubsubpull_request')
-
-        # Deleting field 'UpdateLog.request'
-        db.delete_column('pubsubpull_updatelog', 'request_id')
-
-        # Deleting field 'UpdateLog.old'
-        db.delete_column('pubsubpull_updatelog', 'old')
-
-        # Deleting field 'UpdateLog.new'
-        db.delete_column('pubsubpull_updatelog', 'new')
 
 
     models = {
@@ -94,6 +94,7 @@ class Migration(SchemaMigration):
             'old': ('pubsubpull.fields.JSONB', [], {'null': 'True', 'blank': 'True'}),
             'request': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'changes'", 'null': 'True', 'to': "orm['pubsubpull.Request']"}),
             'table': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'when': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         }
     }

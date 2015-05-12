@@ -15,10 +15,13 @@ class Request(models.Model):
         related_name='requests')
 
 
+OPERATION_TYPE = dict(I="INSERT", U="UPDATE", D="DELETE", T="TRUNCATE")
+
 class UpdateLog(models.Model):
     """Store a change to a single row in a table.
     """
     table = models.CharField(max_length=200)
+    type = models.CharField(max_length=1, choices=OPERATION_TYPE.items())
     when = models.DateTimeField(auto_now_add=True)
     request = models.ForeignKey(Request, null=True, blank=True,
         related_name='changes')
@@ -29,10 +32,4 @@ class UpdateLog(models.Model):
         raise ValidationError("Instances of this class cannot be using Django")
 
     def __unicode__(self):
-        if self.old and self.new:
-            type = "UPDATE"
-        elif self.old:
-            type = "DELETE"
-        else:
-            type = "INSERT"
-        return u"%s %s @ %s" % (type, self.table, self.when)
+        return u"%s %s @ %s" % (OPERATION_TYPE[self.type], self.table, self.when)
