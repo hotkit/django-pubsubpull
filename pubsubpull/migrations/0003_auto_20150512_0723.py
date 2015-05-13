@@ -9,7 +9,7 @@ from pubsubpull import _join_with_project_path
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pubsubpull', '0003_auto_20150508_0910'),
+        ('pubsubpull', '0002_auto_20150513_0130'),
     ]
 
     operations = [
