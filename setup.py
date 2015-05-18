@@ -10,7 +10,7 @@ def read(fname1, fname2):
 
 setup(
     name = "django-pubsubpull",
-    version = "0.0.0.6",
+    version = "0.0.0.7",
     author = "Kirit Saelensminde",
     author_email = "kirit@felspar.com",
     url='https://github.com/KayEss/django-pubsubpull',
@@ -22,7 +22,7 @@ setup(
         'pubsubpull', 'pubsubpull.operations', 'pubsubpull.tests',
         'pubsubpull.migrations', 'pubsubpull.south_migrations'],
     package_data = [
-        ('pubsubpull', 'trigger-attach.sql', 'trigger-function.sql'])],
+        ('pubsubpull', ['trigger-attach.sql', 'trigger-function.sql'])],
     install_requires = [
         'django-slumber', 'django-async'],
     classifiers = [
