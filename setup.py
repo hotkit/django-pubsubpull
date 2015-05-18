@@ -21,6 +21,9 @@ setup(
     packages = [
         'pubsubpull', 'pubsubpull.operations', 'pubsubpull.tests',
         'pubsubpull.migrations', 'pubsubpull.south_migrations'],
+    data_files = [
+        ('',
+            ['pubsubpull/trigger-attach.sql', 'pubsubpull/trigger-function.sql'])],
     install_requires = [
         'django-slumber', 'django-async'],
     classifiers = [
