@@ -6,4 +6,7 @@ from pubsubpull.models import Request, UpdateLog
 
 
 admin.site.register(Request)
-admin.site.register(UpdateLog)
+
+class UpdateLogAdmin(admin.ModelAdmin):
+     raw_id_fields = ['request']
+admin.site.register(UpdateLog, UpdateLogAdmin)
