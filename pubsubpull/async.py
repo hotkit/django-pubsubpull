@@ -5,9 +5,9 @@ from __future__ import absolute_import
 
 from async.api import schedule
 from datetime import timedelta
-from parseurl import urljoin
 from slumber.connector.api import get_model
 from slumber.connector.ua import get
+from urlparse import urljoin
 
 
 try:

@@ -10,7 +10,7 @@ def read(fname1, fname2):
 
 setup(
     name = "django-pubsubpull",
-    version = "0.0.0.10",
+    version = "0.0.0.11",
     author = "Kirit Saelensminde",
     author_email = "kirit@felspar.com",
     url='https://github.com/KayEss/django-pubsubpull',
