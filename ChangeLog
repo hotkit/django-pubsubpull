@@ -1,3 +1,6 @@
+2015-05-19  Kirit Sælensminde  <kirit@felspar.com>
+ Correctly join the URLs we find in the instance page with its URL.
+
 2015-05-07  Kirit Sælensminde  <kirit@felspar.com>
  Get the Django 1.0 tests to run using Postgres.
 
