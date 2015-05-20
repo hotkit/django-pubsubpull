@@ -19,8 +19,11 @@ class Request(models.Model):
     status = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):
-        return "%s %s (%s @ %s) %s" % (self.method, self.path,
-            self.duration or '-', self.started, self.status or '-')
+        if self.duration is None:
+            time = str(self.started)
+        else:
+            time = "%s @ %s" % (self.duration, self.started)
+        return "%s %s (%s) %s" % (self.method, self.path, time, self.status or '-')
 
 
 OPERATION_TYPE = dict(I="INSERT", U="UPDATE", D="DELETE", T="TRUNCATE")
