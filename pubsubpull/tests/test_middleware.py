@@ -12,3 +12,4 @@ class TestMiddleware(TestCase):
         self.assertIsNone(request.user)
         self.assertEquals(request.method, "GET")
         self.assertEquals(request.path, "/slumber/")
+        self.assertIsNotNone(request.duration)

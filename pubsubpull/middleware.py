@@ -1,7 +1,12 @@
 """
     Middleware for pubsubpull.
 """
-
+try:
+    # No name 'timezone' in module 'django.utils'
+    # pylint: disable=E0611
+    from django.utils import timezone
+except ImportError:
+    from datetime import datetime as timezone
 
 from pubsubpull.models import Request
 
@@ -17,3 +22,11 @@ class RequestTracker:
             user = None
         log = Request.objects.create(user=user,
             method=request.method, path=request.path)
+        request.pubsubpull = dict(log=log)
+
+    def process_response(self, request, response):
+        if getattr(request, 'pubsubpull' , None):
+            log = request.pubsubpull['log']
+            log.duration = (timezone.now() - log.started).seconds
+            log.save()
+        return response
