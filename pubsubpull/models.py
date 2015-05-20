@@ -23,7 +23,7 @@ class Request(models.Model):
             time = str(self.started)
         else:
             time = "%s @ %s" % (self.duration, self.started)
-        return "%s %s (%s) %s" % (self.method, self.path, time, self.status or '-')
+        return "%s %s %s (%s) %s" % (self.user, self.method, self.path, time, self.status or '-')
 
 
 OPERATION_TYPE = dict(I="INSERT", U="UPDATE", D="DELETE", T="TRUNCATE")
