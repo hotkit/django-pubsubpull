@@ -15,6 +15,9 @@ class Request(models.Model):
     method = models.CharField(max_length=20)
     path = models.TextField()
 
+    def __unicode__(self):
+        return "%s %s" % (self.method, self.path)
+
 
 OPERATION_TYPE = dict(I="INSERT", U="UPDATE", D="DELETE", T="TRUNCATE")
 
