@@ -25,6 +25,7 @@ def change_detect(model):
     sql = file(_join_with_project_path("trigger-attach.sql")).read()
     sql = sql.format(db_table=model._meta.db_table)
     cursor.execute(sql)
+    return sql
 
 
 def pull(model, callback, **kwargs):
