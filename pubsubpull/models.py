@@ -11,8 +11,9 @@ from pubsubpull.fields import JSONB
 class Request(models.Model):
     """A web request.
     """
-    user = models.ForeignKey(User, null=True, blank=True,
-        related_name='requests')
+    user = models.ForeignKey(User, null=True, blank=True, related_name='requests')
+    method = models.CharField(max_length=20)
+    path = models.TextField()
 
 
 OPERATION_TYPE = dict(I="INSERT", U="UPDATE", D="DELETE", T="TRUNCATE")
