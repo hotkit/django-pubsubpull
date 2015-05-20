@@ -8,6 +8,8 @@ try:
 except ImportError:
     from datetime import datetime as timezone
 
+from django.db import connection
+
 from pubsubpull.models import Request
 
 
@@ -22,6 +24,7 @@ class RequestTracker:
             user = None
         log = Request.objects.create(user=user,
             method=request.method, path=request.path)
+        connection.cursor().execute("SET LOCAL pubsubpull.request_id=%s;" % log.id)
         request.pubsubpull = dict(log=log)
 
     def process_response(self, request, response):
