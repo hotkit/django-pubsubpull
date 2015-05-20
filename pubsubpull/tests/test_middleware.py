@@ -13,3 +13,4 @@ class TestMiddleware(TestCase):
         self.assertEquals(request.method, "GET")
         self.assertEquals(request.path, "/slumber/")
         self.assertIsNotNone(request.duration)
+        self.assertEquals(request.status, response.status_code)

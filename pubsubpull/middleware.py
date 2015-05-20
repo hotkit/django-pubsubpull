@@ -28,5 +28,6 @@ class RequestTracker:
         if getattr(request, 'pubsubpull' , None):
             log = request.pubsubpull['log']
             log.duration = (timezone.now() - log.started).seconds
+            log.status = response.status_code
             log.save()
         return response

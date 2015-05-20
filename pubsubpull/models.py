@@ -16,9 +16,11 @@ class Request(models.Model):
     path = models.TextField()
     started = models.DateTimeField(auto_now_add=True)
     duration = models.FloatField(null=True, blank=True)
+    status = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):
-        return "%s %s (%s @ %s)" % (self.method, self.path, self.duration, self.started)
+        return "%s %s (%s @ %s) %s" % (self.method, self.path,
+            self.duration or '-', self.started, self.status or '-')
 
 
 OPERATION_TYPE = dict(I="INSERT", U="UPDATE", D="DELETE", T="TRUNCATE")
