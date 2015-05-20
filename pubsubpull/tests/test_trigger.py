@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from pubsubpull.api import add_trigger_function, change_detect
-from pubsubpull.models import UpdateLog
+from pubsubpull.models import Request, UpdateLog
 
 from slumber_examples.models import Pizza
 
