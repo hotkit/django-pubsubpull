@@ -14,9 +14,11 @@ class Request(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, related_name='requests')
     method = models.CharField(max_length=20)
     path = models.TextField()
+    started = models.DateTimeField(auto_now_add=True)
+    duration = models.FloatField(null=True, blank=True)
 
     def __unicode__(self):
-        return "%s %s" % (self.method, self.path)
+        return "%s %s (%s @ %s)" % (self.method, self.path, self.duration, self.started)
 
 
 OPERATION_TYPE = dict(I="INSERT", U="UPDATE", D="DELETE", T="TRUNCATE")
