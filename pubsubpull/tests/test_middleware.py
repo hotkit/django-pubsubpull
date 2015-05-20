@@ -26,7 +26,6 @@ class TestMiddleware(TestCase):
     def test_authenticated_request(self):
         self.client.login(username='test', password='password')
         response = self.client.get("/slumber/")
-        print response
         self.assertEqual(UpdateLog.objects.all().count(), 0)
         self.assertEqual(Request.objects.all().count(), 1)
         request = Request.objects.all()[0]
