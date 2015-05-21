@@ -57,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'fost_authn.Middleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'pubsubpull.middleware.RequestTracker',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )

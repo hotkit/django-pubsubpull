@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
-from pubsubpull import _join_with_project_path
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        db.execute(file(_join_with_project_path("trigger-function.sql")).read())
+        # Adding field 'Request.status'
+        db.add_column('pubsubpull_request', 'status',
+                      self.gf('django.db.models.fields.IntegerField')(null=True, blank=True),
+                      keep_default=False)
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Deleting field 'Request.status'
+        db.delete_column('pubsubpull_request', 'status')
+
 
     models = {
         'auth.group': {
@@ -53,7 +58,12 @@ class Migration(DataMigration):
         },
         'pubsubpull.request': {
             'Meta': {'object_name': 'Request'},
+            'duration': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'method': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'path': ('django.db.models.fields.TextField', [], {}),
+            'started': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'status': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'requests'", 'null': 'True', 'to': "orm['auth.User']"})
         },
         'pubsubpull.updatelog': {
@@ -69,4 +79,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['pubsubpull']
-    symmetrical = True
