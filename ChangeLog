@@ -1,3 +1,6 @@
+2015-05-21  Kirit Sælensminde  <kirit@felspar.com>
+ Added middleware that can record requests so that database changes are tied in to them.
+
 2015-05-19  Kirit Sælensminde  <kirit@felspar.com>
  Correctly join the URLs we find in the instance page with its URL.
 
