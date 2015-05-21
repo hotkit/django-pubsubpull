@@ -1,4 +1,5 @@
 2015-05-21  Kirit Sælensminde  <kirit@felspar.com>
+ Register the JSONB field with Slumber when it is installed.
  Added middleware that can record requests so that database changes are tied in to them.
 
 2015-05-19  Kirit Sælensminde  <kirit@felspar.com>

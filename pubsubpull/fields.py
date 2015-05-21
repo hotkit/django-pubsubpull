@@ -37,3 +37,12 @@ try:
 except ImportError: # pragma: no cover
     # South isn't installed so don't worry about it
     pass
+
+try:
+    # If slumber is installed we need to tell it about our custom field
+    from slumber.server.json import DATA_MAPPING
+    DATA_MAPPING['pubsubpull.fields.JSONB'] = lambda m, i, fm, v: v
+except ImportError: # pragma: no cover
+    # Slumber isn't installed, don't worry about it
+    pass
+
