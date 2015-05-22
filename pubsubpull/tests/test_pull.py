@@ -89,3 +89,6 @@ class TestPullStarts(TestCase):
         pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job',
             pull_priority=7, job_priority=6)
         self.assertEquals(Job.objects.filter(priority=7).count(), 1, Job.objects.all())
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.filter(priority=6).count(), 1, Job.objects.all())
+        self.assertEquals(Job.objects.filter(priority=7).count(), 3, Job.objects.all())
