@@ -8,7 +8,9 @@ from django.test import TestCase
 from pubsubpull.api import pull
 from slumber import data_link
 from slumber.connector.ua import for_user
+from slumber.scheme import from_slumber_scheme
 from slumber_examples.models import Pizza
+from urlparse import urljoin
 
 
 def job(url):
@@ -24,7 +26,8 @@ class TestPullStarts(TestCase):
         TestPullStarts.URLS = set()
 
     def check_pizzas(self, pizzas):
-        urls = [data_link(p) for p in pizzas]
+        base = from_slumber_scheme('slumber://pizza/slumber_examples/Pizza/')
+        urls = [urljoin(base, data_link(p)) for p in pizzas]
         self.assertEquals(set(urls), self.URLS)
 
     def print_jobs(self, jobs=None):
@@ -80,3 +83,12 @@ class TestPullStarts(TestCase):
         Job.objects.exclude(scheduled=None).update(scheduled=None)
         management.call_command('flush_queue')
         self.assertEquals(Job.objects.count(), 30)
+
+    def test_pull_priority(self):
+        pizza = Pizza.objects.create(name="Vegetarian")
+        pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job',
+            pull_priority=7, job_priority=6)
+        self.assertEquals(Job.objects.filter(priority=7).count(), 1, Job.objects.all())
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.filter(priority=6).count(), 1, Job.objects.all())
+        self.assertEquals(Job.objects.filter(priority=7).count(), 3, Job.objects.all())

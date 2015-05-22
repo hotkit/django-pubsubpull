@@ -31,5 +31,9 @@ def change_detect(model):
 def pull(model, callback, **kwargs):
     """Start a job pulling data from one service to this one.
     """
-    schedule('pubsubpull.async.pull_monitor',
-        args=[model, callback], kwargs=kwargs)
+    if kwargs.has_key('pull_priority'):
+        schedule('pubsubpull.async.pull_monitor',
+            args=[model, callback], kwargs=kwargs, priority=kwargs['pull_priority'])
+    else:
+        schedule('pubsubpull.async.pull_monitor',
+            args=[model, callback], kwargs=kwargs)
