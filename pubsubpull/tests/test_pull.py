@@ -80,3 +80,9 @@ class TestPullStarts(TestCase):
         Job.objects.exclude(scheduled=None).update(scheduled=None)
         management.call_command('flush_queue')
         self.assertEquals(Job.objects.count(), 30)
+
+    def test_pull_priority(self):
+        pizza = Pizza.objects.create(name="Vegetarian")
+        pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job',
+            pull_priority=7, job_priority=6)
+        self.assertEquals(Job.objects.filter(priority=7).count(), 1, Job.objects.all())
