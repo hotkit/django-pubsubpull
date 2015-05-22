@@ -33,7 +33,7 @@ def pull_monitor(model_url, callback, delay=dict(minutes=1),
         highest = max(item['pk'], highest)
         latest = item['pk']
         if latest > floor:
-            schedule(callback, args=[item['data']])
+            schedule(callback, args=[urljoin(instances_url, item['data'])], priority=job_priority)
     if json.has_key('next_page') and latest > floor:
         schedule('pubsubpull.async.pull_monitor', args=[model_url, callback],
             kwargs=dict(delay=delay, floor=floor,
