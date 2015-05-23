@@ -9,7 +9,7 @@ class Migration(DataMigration):
 
     def forwards(self, orm):
         "Write your forwards methods here."
-        db.execute(file(_join_with_project_path("trigger-function.sql")).read())
+        db.execute(open(_join_with_project_path("trigger-function.sql")).read())
 
     def backwards(self, orm):
         "Write your backwards methods here."

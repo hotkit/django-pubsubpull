@@ -13,5 +13,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(file(_join_with_project_path("trigger-function.sql")).read()),
+        migrations.RunSQL(open(_join_with_project_path("trigger-function.sql")).read()),
     ]
