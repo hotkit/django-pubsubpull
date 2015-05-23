@@ -20,14 +20,14 @@ class Request(models.Model):
     duration = models.FloatField(null=True, blank=True)
     status = models.IntegerField(null=True, blank=True)
 
-    def unicode(self):
+    def __str__(self):
         if self.duration is None:
             time = str(self.started)
         else:
             time = "%s @ %s" % (self.duration, self.started)
         return "%s %s %s (%s) %s" % (self.user, self.method, self.path, time, self.status or '-')
     def __unicode__(self):
-        return self.unicode()
+        return self.__str__()
 
 
 OPERATION_TYPE = dict(I="INSERT", U="UPDATE", D="DELETE", T="TRUNCATE")
@@ -46,7 +46,14 @@ class UpdateLog(models.Model):
     def save(self, **kw):
         raise ValidationError("Instances of this class cannot be using Django")
 
-    def unicode(self):
-        return u"%s %s @ %s" % (OPERATION_TYPE[self.type], self.table, self.when)
+    def __str__(self):
+        if self.request:
+            if self.request.user:
+                request = u"%s - %s %s" % (self.request.id, self.request.user, self.request.method)
+            else:
+                request = u"%s - %s" % (self.request.id, self.request.method)
+            return u"%s %s @ %s (%s)" % (OPERATION_TYPE[self.type], self.table, self.when, request)
+        else:
+            return u"%s %s @ %s" % (OPERATION_TYPE[self.type], self.table, self.when)
     def __unicode__(self):
-        return self.unicode()
+        return self.__str__()
