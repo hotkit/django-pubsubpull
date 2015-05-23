@@ -1,5 +1,6 @@
 import os
 from setuptools import setup
+import sys
 
 def read(fname1, fname2):
     if os.path.exists(fname1):
@@ -8,9 +9,13 @@ def read(fname1, fname2):
         fname = fname2
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+extra = {}
+if sys.version_info >= (3,):
+    extra['use_2to3'] = True
+
 setup(
     name = "django-pubsubpull",
-    version = "0.0.0.16",
+    version = "0.0.0.17",
     author = "Kirit Saelensminde",
     author_email = "kirit@felspar.com",
     url='https://github.com/KayEss/django-pubsubpull',
@@ -31,4 +36,5 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved",
     ],
+    **extra
 )
