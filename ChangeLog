@@ -1,0 +1,22 @@
+2015-05-23  Kirit Sælensminde  <kirit@felspar.com>
+ Allow the user model to be swapped out in more recent versions of Django.
+ Use 2to3 on installation on Python 3 systems.
+ Make print statements Python 3 compatible.
+
+2015-05-22  Kirit Sælensminde  <kirit@felspar.com>
+ Implement `job_priority` and `pull_priority` to give more control over execution.
+
+2015-05-21  Kirit Sælensminde  <kirit@felspar.com>
+ Register the JSONB field with Slumber when it is installed.
+ Added middleware that can record requests so that database changes are tied in to them.
+
+2015-05-19  Kirit Sælensminde  <kirit@felspar.com>
+ Correctly join the URLs we find in the instance page with its URL.
+
+2015-05-07  Kirit Sælensminde  <kirit@felspar.com>
+ Get the Django 1.0 tests to run using Postgres.
+
+2015-05-05  Kirit Sælensminde  <kirit@felspar.com>
+ Added migrations for South and Django 1.7
+ Added initial version of pull capability
+ Added ChangeLog

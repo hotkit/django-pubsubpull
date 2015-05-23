@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+cd `dirname $0`
+source virtualenvwrapper.sh
+
+mkvirtualenv pubsubpull_1.0
+pip install -U -r common.pip -r django_1_0/setup.pip
+pip freeze
+deactivate
+
+mkvirtualenv pubsubpull_1.4
+pip install -U -r common.pip -r django_1_4/setup.pip
+pip freeze
+deactivate
+
+mkvirtualenv  pubsubpull_1.7
+pip install -U -r common.pip -r django_1_7/setup.pip
+pip freeze
+deactivate

@@ -1,0 +1,27 @@
+language: python
+sudo: required
+
+services:
+    - postgresql
+
+python:
+    - "2.7"
+
+env:
+    - DJANGO=1_0 OPTS=d1
+    - DJANGO=1_4
+    - DJANGO=1_7
+
+before_install:
+   - sudo apt-get update
+   - sudo apt-get purge postgresql-9.1 postgresql-9.2 postgresql-9.3
+   - sudo apt-get install postgresql-client-common postgresql-9.4
+   - sudo service postgresql start
+install:
+    - "pip install -r test-projects/common.pip -r test-projects/django_${DJANGO}/setup.pip"
+
+before_script:
+    - psql -c 'create database "pubsubpull";' -U postgres
+
+script:
+    - "cd test-projects/django_${DJANGO} && python manage.py test ${OPTS} pubsubpull${TESTS}"
