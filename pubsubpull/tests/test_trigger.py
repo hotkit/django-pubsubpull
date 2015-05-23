@@ -30,7 +30,7 @@ class TestTrigger(TestCase):
         self.assertEqual(log.table, 'slumber_examples_pizza')
         self.assertIsNone(log.request)
         self.assertIsNone(log.old)
-        print type(log.new), log.new, repr(log.new)
+        print(type(log.new), log.new, repr(log.new))
         self.assertEqual(log.new, dict(id=p1.id, name="P1", exclusive_to_id=None,
             for_sale=False, max_extra_toppings=None))
 

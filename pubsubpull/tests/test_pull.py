@@ -33,9 +33,9 @@ class TestPullStarts(TestCase):
     def print_jobs(self, jobs=None):
         if not jobs:
             jobs = Job.objects.all()
-        print "*** %s jobs ***" % jobs.count()
+        print("*** %s jobs ***" % jobs.count())
         for j in jobs.order_by('pk'):
-            print j.id, j, j.executed, j.scheduled
+            print(j.id, j, j.executed, j.scheduled)
 
     def test_empty_pull(self):
         pull('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
@@ -66,7 +66,7 @@ class TestPullStarts(TestCase):
         pizzas = self.test_pull_eleven()
         for p in range(12, 23):
             pizzas.append(Pizza.objects.create(name="Pizza %s" % p))
-        print "*** -- dropping scheduled time on jobs to force execution"
+        print("*** -- dropping scheduled time on jobs to force execution")
         Job.objects.exclude(scheduled=None).update(scheduled=None)
         management.call_command('flush_queue')
         self.print_jobs()
@@ -79,7 +79,7 @@ class TestPullStarts(TestCase):
     def test_pull_eleven_then_eleven_then_one(self):
         pizzas = self.test_pull_eleven_then_eleven()
         pizzas.append(Pizza.objects.create(name="Four cheeses"))
-        print "*** -- dropping scheduled time on jobs to force execution"
+        print("*** -- dropping scheduled time on jobs to force execution")
         Job.objects.exclude(scheduled=None).update(scheduled=None)
         management.call_command('flush_queue')
         self.assertEquals(Job.objects.count(), 30)
