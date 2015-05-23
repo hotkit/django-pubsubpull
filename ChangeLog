@@ -1,4 +1,5 @@
 2015-05-23  Kirit Sælensminde  <kirit@felspar.com>
+ Allow the user model to be swapped out in more recent versions of Django.
  Use 2to3 on installation on Python 3 systems.
  Make print statements Python 3 compatible.
 

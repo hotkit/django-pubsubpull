@@ -1,7 +1,7 @@
 """
     Models.
 """
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -11,7 +11,9 @@ from pubsubpull.fields import JSONB
 class Request(models.Model):
     """A web request.
     """
-    user = models.ForeignKey(User, null=True, blank=True, related_name='requests')
+    user = models.ForeignKey(
+        getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
+        null=True, blank=True, related_name='requests')
     method = models.CharField(max_length=20)
     path = models.TextField()
     started = models.DateTimeField(auto_now_add=True)
