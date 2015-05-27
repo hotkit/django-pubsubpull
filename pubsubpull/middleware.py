@@ -28,9 +28,9 @@ class RequestTracker:
         request.pubsubpull = dict(log=log)
 
     def process_response(self, request, response):
-        if getattr(request, 'pubsubpull' , None):
-            log = request.pubsubpull['log']
-            log.duration = (timezone.now() - log.started).seconds
-            log.status = response.status_code
-            log.save()
+        # if getattr(request, 'pubsubpull' , None):
+        #     log = request.pubsubpull['log']
+        #     log.duration = (timezone.now() - log.started).seconds
+        #     log.status = response.status_code
+        #     log.save()
         return response

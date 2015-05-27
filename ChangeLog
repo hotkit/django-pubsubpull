@@ -1,3 +1,6 @@
+2015-05-27  Kirit Sælensminde  <kirit@felspar.com>
+ Disabled the end-of-request data capture in the request log because it caused problems for Postgres' serialized isolation level on some machines.
+
 2015-05-23  Kirit Sælensminde  <kirit@felspar.com>
  Support both early and late Django __unicode__/unicode methods.
  Allow the user model to be swapped out in more recent versions of Django.
