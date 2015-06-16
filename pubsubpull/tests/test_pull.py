@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from pubsubpull.api import pull
+from pubsubpull.api import pull, pull_up
 from slumber import data_link
 from slumber.connector.ua import for_user
 from slumber.scheme import from_slumber_scheme
@@ -92,3 +92,22 @@ class TestPullStarts(TestCase):
         management.call_command('flush_queue')
         self.assertEquals(Job.objects.filter(priority=6).count(), 1, Job.objects.all())
         self.assertEquals(Job.objects.filter(priority=7).count(), 3, Job.objects.all())
+
+    def test_pull_up_monitor(self):
+        pizzas = []
+        pizzas.append(Pizza.objects.create(name="Pizza %s" % 1))
+        pull_up('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
+        self.assertEquals(Job.objects.count(), 1)
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.count(), 2)
+        print("*** -- dropping scheduled time on jobs to force execution")
+        Job.objects.exclude(scheduled=None).update(scheduled=None)
+        pizzas.append(Pizza.objects.create(name="Pizza %s" % 2))
+        pizzas.append(Pizza.objects.create(name="Pizza %s" % 3))
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.count(), 3)
+        print("*** -- dropping scheduled time on jobs to force execution")
+        Job.objects.exclude(scheduled=None).update(scheduled=None)
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.count(), 4)
+        return pizzas

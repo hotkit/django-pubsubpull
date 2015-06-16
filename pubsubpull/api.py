@@ -37,3 +37,10 @@ def pull(model, callback, **kwargs):
     else:
         schedule('pubsubpull.async.pull_monitor',
             args=[model, callback], kwargs=kwargs)
+
+
+def pull_up(model, callback, **kwargs):
+    """Start a job monitoring new instance from latest instance.
+    """
+    schedule('pubsubpull.async.pullup_monitor',
+        args=[model, callback], kwargs=kwargs)
