@@ -52,18 +52,44 @@ def pull_monitor(model_url, callback, delay=dict(minutes=1),
 
 def pullup_monitor(model_url, callback, delay=dict(minutes=1),
         page_url=None, floor=0, pull_priority=5, job_priority=5):
-    """Used to look for instances that need to be pulled.
-        This only works with models who use an auto-incremented primary key.
-    """
+
     model = get_model(model_url)
     instance_url = model._operations['instances']
     _, json = get(instance_url)
     for item in json['page']:
-        floor = max(item['pk'], floor)
+        highest = max(item['pk'], floor)
+        latest = item['pk']
+        if latest > floor:
+            schedule(callback, args=[urljoin(instance_url, item['data'])], priority=job_priority)
 
-    run_after = timezone.now() + timedelta(**delay)
-    schedule('pubsubpull.async.pullup_monitor', run_after=run_after,
-        args=[model_url, callback], kwargs=dict(delay=delay, floor=floor,
-            pull_priority=pull_priority, job_priority=job_priority),
-        priority=pull_priority)
-    print("Looking for new instances above", floor)
+    if latest > highest or floor == 0:
+        run_after = timezone.now() + timedelta(**delay)
+        schedule('pubsubpull.async.pullup_monitor', run_after=run_after,
+            args=[model_url, callback], kwargs=dict(delay=delay, floor=highest,
+                pull_priority=pull_priority, job_priority=job_priority),
+            priority=pull_priority)
+        print("Looking for new instances above", highest)
+
+
+# def pulldown_monitor(model_url, callback, delay=dict(minutes=1),
+#         page_url=None, floor=0, pull_priority=5, job_priority=5):
+#
+#     if not page_url:
+#         model = get_model(model_url)
+#         instances_url = model._operations['instances']
+#     else:
+#         instances_url = page_url
+#     _, json = get(instances_url or page_url)
+#     latest, highest = None, floor
+#     for item in json['page']:
+#         highest = max(item['pk'], highest)
+#         latest = item['pk']
+#         if latest > floor:
+#             schedule(callback, args=[urljoin(instances_url, item['data'])], priority=job_priority)
+#     if json.has_key('next_page') and latest > floor:
+#         schedule('pubsubpull.async.pull_monitor', args=[model_url, callback],
+#              kwargs=dict(delay=delay, floor=floor,
+#                          page_url=urljoin(instances_url, json['next_page']),
+#                          pull_priority=pull_priority, job_priority=job_priority),
+#              priority=pull_priority)
+#     print("Got another page to process", json['next_page'], floor)

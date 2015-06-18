@@ -44,3 +44,9 @@ def pull_up(model, callback, **kwargs):
     """
     schedule('pubsubpull.async.pullup_monitor',
         args=[model, callback], kwargs=kwargs)
+
+# def pull_down(model, callback, **kwargs):
+#     """Start a job pulling data from latest to beginning instance.
+#     """
+#     schedule('pubsubpull.async.pulldown_monitor',
+#         args=[model, callback], kwargs=kwargs)
