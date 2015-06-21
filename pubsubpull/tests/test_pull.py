@@ -124,4 +124,3 @@ class TestPullStarts(TestCase):
         self.assertEquals(Job.objects.filter(name='pubsubpull.async.pulldown_monitor').count(), 3)
         self.assertEquals(Job.objects.filter(name='pubsubpull.tests.test_pull.job').count(), 11)
         self.check_pizzas(pizzas)
-
