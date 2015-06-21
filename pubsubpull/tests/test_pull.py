@@ -123,4 +123,5 @@ class TestPullStarts(TestCase):
         management.call_command('flush_queue')
         self.assertEquals(Job.objects.filter(name='pubsubpull.async.pulldown_monitor').count(), 3)
         self.assertEquals(Job.objects.filter(name='pubsubpull.tests.test_pull.job').count(), 11)
+        self.assertEquals(Job.objects.filter(executed=None).count(), 0)
         self.check_pizzas(pizzas)
