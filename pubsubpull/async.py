@@ -71,25 +71,25 @@ def pullup_monitor(model_url, callback, delay=dict(minutes=1),
     print("Looking for new instances above", highest)
 
 
-# def pulldown_monitor(model_url, callback, delay=dict(minutes=1),
-#         page_url=None, floor=0, pull_priority=5, job_priority=5):
-#
-#     if not page_url:
-#         model = get_model(model_url)
-#         instances_url = model._operations['instances']
-#     else:
-#         instances_url = page_url
-#     _, json = get(instances_url or page_url)
-#     latest, highest = None, floor
-#     for item in json['page']:
-#         highest = max(item['pk'], highest)
-#         latest = item['pk']
-#         if latest > floor:
-#             schedule(callback, args=[urljoin(instances_url, item['data'])], priority=job_priority)
-#     if json.has_key('next_page') and latest > floor:
-#         schedule('pubsubpull.async.pull_monitor', args=[model_url, callback],
-#              kwargs=dict(delay=delay, floor=floor,
-#                          page_url=urljoin(instances_url, json['next_page']),
-#                          pull_priority=pull_priority, job_priority=job_priority),
-#              priority=pull_priority)
-#     print("Got another page to process", json['next_page'], floor)
+def pulldown_monitor(model_url, callback, delay=dict(minutes=1),
+        page_url=None, floor=0, pull_priority=5, job_priority=5):
+
+    if not page_url:
+        model = get_model(model_url)
+        instances_url = model._operations['instances']
+    else:
+        instances_url = page_url
+    _, json = get(instances_url or page_url)
+    latest, highest = None, floor
+    for item in json['page']:
+        highest = max(item['pk'], highest)
+        latest = item['pk']
+        if latest > floor:
+            schedule(callback, args=[urljoin(instances_url, item['data'])], priority=job_priority)
+    if json.has_key('next_page') and latest > floor:
+        schedule('pubsubpull.async.pulldown_monitor', args=[model_url, callback],
+             kwargs=dict(delay=delay, floor=floor,
+                         page_url=urljoin(instances_url, json['next_page']),
+                         pull_priority=pull_priority, job_priority=job_priority),
+             priority=pull_priority)
+        print("Got another page to process", json['next_page'], floor)

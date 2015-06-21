@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from pubsubpull.api import pull, pull_up
+from pubsubpull.api import pull, pull_up, pull_down
 from slumber import data_link
 from slumber.connector.ua import for_user
 from slumber.scheme import from_slumber_scheme
@@ -119,3 +119,13 @@ class TestPullStarts(TestCase):
         self.check_pizzas(pizzas)
         return pizzas
 
+    def test_pull_down_eleven(self):
+        pizzas = []
+        for p in range(1, 12):
+            pizzas.append(Pizza.objects.create(name="Pizza %s" % p))
+        pull_down('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
+        self.assertEquals(Job.objects.count(), 1)
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.filter(name='pubsubpull.async.pulldown_monitor').count(), 3)
+        self.assertEquals(Job.objects.filter(name='pubsubpull.tests.test_pull.job').count(), 11)
+        self.check_pizzas(pizzas)
