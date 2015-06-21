@@ -56,19 +56,19 @@ def pullup_monitor(model_url, callback, delay=dict(minutes=1),
     model = get_model(model_url)
     instance_url = model._operations['instances']
     _, json = get(instance_url)
+    latest, highest = None, floor
     for item in json['page']:
-        highest = max(item['pk'], floor)
+        highest = max(item['pk'], highest)
         latest = item['pk']
         if latest > floor:
             schedule(callback, args=[urljoin(instance_url, item['data'])], priority=job_priority)
 
-    if latest > highest or floor == 0:
-        run_after = timezone.now() + timedelta(**delay)
-        schedule('pubsubpull.async.pullup_monitor', run_after=run_after,
-            args=[model_url, callback], kwargs=dict(delay=delay, floor=highest,
-                pull_priority=pull_priority, job_priority=job_priority),
-            priority=pull_priority)
-        print("Looking for new instances above", highest)
+    run_after = timezone.now() + timedelta(**delay)
+    schedule('pubsubpull.async.pullup_monitor', run_after=run_after,
+        args=[model_url, callback], kwargs=dict(delay=delay, floor=highest,
+            pull_priority=pull_priority, job_priority=job_priority),
+        priority=pull_priority)
+    print("Looking for new instances above", highest)
 
 
 # def pulldown_monitor(model_url, callback, delay=dict(minutes=1),
