@@ -93,31 +93,26 @@ class TestPullStarts(TestCase):
         self.assertEquals(Job.objects.filter(priority=6).count(), 1, Job.objects.all())
         self.assertEquals(Job.objects.filter(priority=7).count(), 3, Job.objects.all())
 
-    def test_pull_up_monitor(self):
+    def test_pull_up_two(self):
         pizzas = []
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 1))
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 2))
         pull_up('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
         management.call_command('flush_queue')
-
-        #have 1 job monitor to run and 1 call back job
         self.assertEquals(Job.objects.filter(name='pubsubpull.tests.test_pull.job').count(), 2)
         self.assertEquals(Job.objects.filter(name='pubsubpull.async.pullup_monitor', executed=None).count(), 1)
+        return pizzas
 
+    def test_pull_up_two_then_two(self):
+        pizzas = self.test_pull_up_two()
         print("*** -- dropping scheduled time on jobs to force execution")
         Job.objects.exclude(scheduled=None).update(scheduled=None)
-
-        #add objects so it will monitor the latest one and create callback job for both instance
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 3))
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 4))
-
         management.call_command('flush_queue')
-
-        #should have 1 monitor job for floor=63
         self.assertEquals(Job.objects.filter(name='pubsubpull.async.pullup_monitor', executed=None).count(), 1)
         self.check_pizzas(pizzas)
-        return pizzas
 
     def test_pull_down_eleven(self):
         pizzas = []
@@ -129,3 +124,4 @@ class TestPullStarts(TestCase):
         self.assertEquals(Job.objects.filter(name='pubsubpull.async.pulldown_monitor').count(), 3)
         self.assertEquals(Job.objects.filter(name='pubsubpull.tests.test_pull.job').count(), 11)
         self.check_pizzas(pizzas)
+
