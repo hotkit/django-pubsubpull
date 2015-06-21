@@ -1,3 +1,6 @@
+2015-06-21  Yothin Muangsommuk  <yothin@proteus-tech.com>
+ Extend the pull monitor APIs to have more control over how it starts and carries on
+
 2015-05-27  Kirit Sælensminde  <kirit@felspar.com>
  Disabled the end-of-request data capture in the request log because it caused problems for Postgres' serialized isolation level on some machines.
 
