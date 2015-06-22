@@ -41,10 +41,12 @@ def pull_monitor(model_url, callback, delay=dict(minutes=1),
                 pull_priority=pull_priority, job_priority=job_priority),
             priority=pull_priority)
         print("Got another page to process", json['next_page'], floor)
-    if not page_url:
+    if not page_url and delay:
         run_after = timezone.now() + timedelta(**delay)
         schedule('pubsubpull.async.pull_monitor', run_after=run_after,
             args=[model_url, callback], kwargs=dict(delay=delay, floor=highest,
                 pull_priority=pull_priority, job_priority=job_priority),
             priority=pull_priority)
         print("Looking for new instances above", highest)
+
+

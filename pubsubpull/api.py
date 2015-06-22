@@ -8,6 +8,8 @@ from django.db import connection
 
 from pubsubpull import _join_with_project_path
 
+from slumber.connector.api import get_model
+from slumber.connector.ua import get
 
 def add_trigger_function():
     """Used for older versions of Postres, or test runs where there are no
@@ -37,3 +39,22 @@ def pull(model, callback, **kwargs):
     else:
         schedule('pubsubpull.async.pull_monitor',
             args=[model, callback], kwargs=kwargs)
+
+
+def pull_up(model, callback, **kwargs):
+    """Start a job monitoring new instance from latest instance.
+    """
+    model_instance = get_model(model)
+    instance_url = model_instance._operations['instances']
+    _, json = get(instance_url)
+
+    schedule('pubsubpull.async.pull_monitor',
+        args=[model, callback], kwargs=dict(floor=json['page'][0]['pk']))
+
+
+def pull_down(model, callback, **kwargs):
+    """Start a job pulling data from latest to beginning instance.
+    """
+    schedule('pubsubpull.async.pull_monitor',
+        args=[model, callback], kwargs=dict(delay=None))
+
