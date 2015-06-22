@@ -93,25 +93,26 @@ class TestPullStarts(TestCase):
         self.assertEquals(Job.objects.filter(priority=6).count(), 1, Job.objects.all())
         self.assertEquals(Job.objects.filter(priority=7).count(), 3, Job.objects.all())
 
-    def test_pull_up_two(self):
+    def test_set_pullup_and_pulldown_two(self):
         pizzas = []
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 1))
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 2))
+        pull_down('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job', delay=None)
         pull_up('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
-        self.assertEquals(Job.objects.count(), 1)
+        self.assertEquals(Job.objects.count(), 2)
         management.call_command('flush_queue')
-        self.assertEquals(Job.objects.filter(name='pubsubpull.tests.test_pull.job').count(), 2)
-        self.assertEquals(Job.objects.filter(name='pubsubpull.async.pullup_monitor', executed=None).count(), 1)
+        self.assertEquals(Job.objects.filter(name='pubsubpull.async.pull_monitor', executed=None).count(), 1)
+        self.check_pizzas(pizzas)
         return pizzas
 
-    def test_pull_up_two_then_two(self):
-        pizzas = self.test_pull_up_two()
-        print("*** -- dropping scheduled time on jobs to force execution")
-        Job.objects.exclude(scheduled=None).update(scheduled=None)
+    def test_set_pullup_and_pulldown_two_then_pullup_two(self):
+        pizzas = self.test_set_pullup_and_pulldown_two()
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 3))
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 4))
+        print("*** -- dropping scheduled time on jobs to force execution")
+        Job.objects.exclude(scheduled=None).update(scheduled=None)
         management.call_command('flush_queue')
-        self.assertEquals(Job.objects.filter(name='pubsubpull.async.pullup_monitor', executed=None).count(), 1)
+        self.assertEquals(Job.objects.filter(name='pubsubpull.async.pull_monitor', executed=None).count(), 1)
         self.check_pizzas(pizzas)
 
     def test_pull_down_eleven(self):
@@ -121,7 +122,7 @@ class TestPullStarts(TestCase):
         pull_down('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
         self.assertEquals(Job.objects.count(), 1)
         management.call_command('flush_queue')
-        self.assertEquals(Job.objects.filter(name='pubsubpull.async.pulldown_monitor').count(), 3)
+        self.assertEquals(Job.objects.filter(name='pubsubpull.async.pull_monitor').count(), 3)
         self.assertEquals(Job.objects.filter(name='pubsubpull.tests.test_pull.job').count(), 11)
         self.assertEquals(Job.objects.filter(executed=None).count(), 0)
         self.check_pizzas(pizzas)
