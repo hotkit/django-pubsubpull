@@ -49,14 +49,12 @@ def pull_up(model, callback, **kwargs):
     _, json = get(instance_url)
 
     schedule('pubsubpull.async.pull_monitor',
-        args=[model, callback],
-        kwargs=dict(floor=json['page'][0]['pk']))
+        args=[model, callback], kwargs=dict(floor=json['page'][0]['pk']))
 
 
 def pull_down(model, callback, **kwargs):
     """Start a job pulling data from latest to beginning instance.
     """
-    kwargs['delay'] = None
     schedule('pubsubpull.async.pull_monitor',
-        args=[model, callback], kwargs=kwargs)
+        args=[model, callback], kwargs=dict(delay=None))
 
