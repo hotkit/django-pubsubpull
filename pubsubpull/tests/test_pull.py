@@ -1,3 +1,4 @@
+import json
 from async.models import Job
 
 from django.core import management
@@ -126,3 +127,46 @@ class TestPullStarts(TestCase):
         self.assertEquals(Job.objects.filter(name='pubsubpull.tests.test_pull.job').count(), 11)
         self.assertEquals(Job.objects.filter(executed=None).count(), 0)
         self.check_pizzas(pizzas)
+
+
+def callback_with_kwargs(url, param1=1, param2='hello'):
+    pass
+
+
+class TestApiFunctions(TestCase):
+
+    def setUp(self):
+        self.service = User.objects.create(
+            username=settings.SLUMBER_SERVICE,
+            is_active=True, is_staff=True, is_superuser=True,
+            password=settings.SECRET_KEY)
+
+    def test_api_pull_add_new_job_with_callback_kwargs(self):
+        callback_kwargs = dict(param1=10,
+                               param2='python')
+        pull('slumber://pizza/slumber_examples/Pizza/',
+             'pubsubpull.tests.test_pull.callback_with_kwargs',
+             callback_kwargs=callback_kwargs)
+        self.assertEquals(Job.objects.count(), 1)
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.count(), 2)
+        job_with_callback_kwargs = Job.objects.all()[1]
+        self.assertDictEqual(callback_kwargs,
+                             json.loads(job_with_callback_kwargs.kwargs)['callback_kwargs'])
+
+    def test_pull_eleven(self):
+        pizzas = [Pizza.objects.create(name="Pizza {}".format(i)) for i in range(1, 12)]
+        callback_kwargs = dict(param1=10,
+                               param2='python')
+        pull('slumber://pizza/slumber_examples/Pizza/',
+             'pubsubpull.tests.test_pull.callback_with_kwargs',
+             callback_kwargs=callback_kwargs)
+        self.assertEquals(Job.objects.count(), 1)
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.count(), 15)
+        # every jobs added by pull should call callback with kwargs
+        jobs_with_callback_kwargs = Job.objects.filter(name='pubsubpull.tests.test_pull.callback_with_kwargs')
+        for _job in jobs_with_callback_kwargs:
+            self.assertDictEqual(callback_kwargs,
+                                 json.loads(_job.kwargs))
+

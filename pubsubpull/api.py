@@ -30,10 +30,13 @@ def change_detect(model):
     return sql
 
 
-def pull(model, callback, **kwargs):
+def pull(model, callback, callback_kwargs=None, **kwargs):
     """Start a job pulling data from one service to this one.
     """
-    if kwargs.has_key('pull_priority'):
+    if callback_kwargs is None:
+        callback_kwargs = {}
+    kwargs['callback_kwargs'] = callback_kwargs
+    if 'pull_priority' in kwargs:
         schedule('pubsubpull.async.pull_monitor',
             args=[model, callback], kwargs=kwargs, priority=kwargs['pull_priority'])
     else:
@@ -41,20 +44,25 @@ def pull(model, callback, **kwargs):
             args=[model, callback], kwargs=kwargs)
 
 
-def pull_up(model, callback, **kwargs):
+def pull_up(model, callback, callback_kwargs=None, **kwargs):
     """Start a job monitoring new instance from latest instance.
     """
+    if callback_kwargs is None:
+        callback_kwargs = {}
+    kwargs['callback_kwargs'] = callback_kwargs
     model_instance = get_model(model)
     instance_url = model_instance._operations['instances']
-    _, json = get(instance_url)
+    _, json_data = get(instance_url)
+    kwargs['floor'] = json_data['page'][0]['pk']
+    schedule('pubsubpull.async.pull_monitor', args=[model, callback], kwargs=kwargs)
 
-    schedule('pubsubpull.async.pull_monitor',
-        args=[model, callback], kwargs=dict(floor=json['page'][0]['pk']))
 
-
-def pull_down(model, callback, **kwargs):
+def pull_down(model, callback, callback_kwargs=None, **kwargs):
     """Start a job pulling data from latest to beginning instance.
     """
-    schedule('pubsubpull.async.pull_monitor',
-        args=[model, callback], kwargs=dict(delay=None))
+    if callback_kwargs is None:
+        callback_kwargs = {}
+    kwargs['callback_kwargs'] = callback_kwargs
+    kwargs['delay'] = 0
+    schedule('pubsubpull.async.pull_monitor', args=[model, callback], kwargs=kwargs)
 
