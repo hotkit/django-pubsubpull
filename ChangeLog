@@ -1,3 +1,8 @@
+2015-08-12  Nui Narongwet <narongwet@proteus-tech.com>
+ Added async_monitor, monitor_model and monitor_service
+ Added ChangeSubscription model
+ Added callback_kwargs paramiter to api functions
+
 2015-06-21  Yothin Muangsommuk  <yothin@proteus-tech.com>
  Extend the pull monitor APIs to have more control over how it starts and carries on
 

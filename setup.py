@@ -15,7 +15,7 @@ if sys.version_info >= (3,):
 
 setup(
     name = "django-pubsubpull",
-    version = "0.1.0.4",
+    version = "0.1.1.0",
     author = "Kirit Saelensminde",
     author_email = "kirit@felspar.com",
     url='https://github.com/KayEss/django-pubsubpull',
