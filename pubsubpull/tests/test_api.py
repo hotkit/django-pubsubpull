@@ -84,7 +84,7 @@ class TestApiMonitor(TestCase):
         # it should call pull_up
         pull_up.assert_called_with(
             self.update_log_model_url,
-            'pullsubpull.api.async_monitor',
+            'pubsubpull.api.async_monitor',
             callback_kwargs=expected_callback_kwargs)
 
 

@@ -119,6 +119,6 @@ def monitor_model(update_log_model_url, model_url, table,
 def monitor_service(update_log_model_url):
     callback_kwargs = {'update_log_model_url': update_log_model_url}
     pull_up(update_log_model_url,
-            'pullsubpull.api.async_monitor',
+            'pubsubpull.api.async_monitor',
             callback_kwargs=callback_kwargs)
 
