@@ -1,3 +1,6 @@
+2015-08-18  Nui Narongwet <narongwet@proteus-tech.com>
+ Fix typos
+
 2015-08-12  Nui Narongwet <narongwet@proteus-tech.com>
  Added async_monitor, monitor_model and monitor_service
  Added ChangeSubscription model
