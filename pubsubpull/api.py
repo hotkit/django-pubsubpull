@@ -58,7 +58,7 @@ def pull_up(model, callback, callback_kwargs=None, **kwargs):
     model_instance = get_model(model)
     instance_url = model_instance._operations['instances']
     _, json_data = get(instance_url)
-    kwargs['floor'] = json_data['page'][0]['pk']
+    kwargs['floor'] = json_data['page'][0]['pk'] if json_data['page'] else 0
     schedule('pubsubpull.async.pull_monitor', args=[model, callback], kwargs=kwargs)
 
 

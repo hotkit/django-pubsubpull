@@ -94,6 +94,16 @@ class TestPullStarts(TestCase):
         self.assertEquals(Job.objects.filter(priority=6).count(), 1, Job.objects.all())
         self.assertEquals(Job.objects.filter(priority=7).count(), 3, Job.objects.all())
 
+    def test_pull_from_model_with_no_instance(self):
+        pizzas = []
+        pull_down('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job', delay=None)
+        pull_up('slumber://pizza/slumber_examples/Pizza/', 'pubsubpull.tests.test_pull.job')
+        self.assertEquals(Job.objects.count(), 2)
+        management.call_command('flush_queue')
+        self.assertEquals(Job.objects.filter(name='pubsubpull.async.pull_monitor', executed=None).count(), 1)
+        self.check_pizzas(pizzas)
+        return pizzas
+
     def test_set_pullup_and_pulldown_two(self):
         pizzas = []
         pizzas.append(Pizza.objects.create(name="Pizza %s" % 1))
