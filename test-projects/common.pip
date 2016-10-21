@@ -1,8 +1,9 @@
 simplejson
 
+django-async
+django-slumber
+
 # Used for testing
 coverage
 mock
-
-django-async
-django-slumber
+pylint
