@@ -1,5 +1,7 @@
 # Django PubSubPull #
 
+[![Build Status](https://travis-ci.org/KayEss/django-pubsubpull.svg?branch=master)](https://travis-ci.org/KayEss/django-pubsubpull)
+
 `django-pubsubpull` is intended to help you decouple micro-services. It provides mechanisms that allow services to publish changes, subscribe to change notifications, and pull records.
 
 In practice what we'll end up with is along the lines of:
