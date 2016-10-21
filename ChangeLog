@@ -1,5 +1,6 @@
 2016-10-21  Kirit Sælensminde  <kirit@felspar.com>
- Drop support for Django 1.0
+ * Split the middleware into two parts.
+ * Drop support for Django 1.0
 
 2015-08-20 Nui Narongwet <narongwet@proteus-tech.com>
  Fix error if model has no record
