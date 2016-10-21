@@ -4,5 +4,5 @@ simplejson
 coverage
 mock
 
-git+https://github.com/KayEss/django-async.git@develop
-git+https://github.com/KayEss/django-slumber.git@develop
+django-async
+django-slumber
