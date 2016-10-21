@@ -8,7 +8,6 @@ python:
     - "2.7"
 
 env:
-    - DJANGO=1_0 OPTS=d1
     - DJANGO=1_4
     - DJANGO=1_7
 
