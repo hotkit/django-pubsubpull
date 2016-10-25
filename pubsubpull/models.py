@@ -4,8 +4,6 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from slumber.server import get_slumber_root
-from slumber._caches import DATABASE_TABLE_TO_SLUMBER_MODEL
 
 from pubsubpull.fields import JSONB
 
@@ -52,6 +50,8 @@ class UpdateLog(models.Model):
 
     @property
     def instance_url(self):
+        from slumber.server import get_slumber_root
+        from slumber._caches import DATABASE_TABLE_TO_SLUMBER_MODEL
         slumber_model = DATABASE_TABLE_TO_SLUMBER_MODEL[self.table]
         pk_name = slumber_model.model._meta.pk.name
         pk = self.new[pk_name] if self.new else self.old[pk_name]
