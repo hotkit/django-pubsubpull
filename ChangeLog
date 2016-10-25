@@ -1,3 +1,6 @@
+2016-10-25  Kirit Sælensminde  <kirit@felspar.com>
+ Remove some places where slumber is imported even though it isn't really required.
+
 2016-10-21  Kirit Sælensminde  <kirit@felspar.com>
  * Split the middleware into two parts.
  * Drop support for Django 1.0

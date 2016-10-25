@@ -6,33 +6,14 @@ import json
 from urlparse import urlparse, urlunparse, urljoin
 
 from async.api import schedule
-from django.db import connection
 from slumber.connector.api import get_model
 from slumber.connector.ua import get
 
 from slumber.scheme import from_slumber_scheme
 
 from pubsubpull import _join_with_project_path
+from pubsubpull.migrate import add_trigger_function, change_detect
 from pubsubpull.models import ChangeSubscription
-
-
-def add_trigger_function():
-    """Used for older versions of Postres, or test runs where there are no
-        migrations.
-    """
-    cursor = connection.cursor()
-    sql = open(_join_with_project_path("trigger-function.sql")).read()
-    cursor.execute(sql)
-
-
-def change_detect(model):
-    """Enable change detection on the requested model.
-    """
-    cursor = connection.cursor()
-    sql = open(_join_with_project_path("trigger-attach.sql")).read()
-    sql = sql.format(db_table=model._meta.db_table)
-    cursor.execute(sql)
-    return sql
 
 
 def pull(model, callback, callback_kwargs=None, **kwargs):
