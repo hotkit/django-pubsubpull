@@ -1,4 +1,29 @@
+2016-10-25  Kirit Sælensminde  <kirit@felspar.com>
+ Remove some places where slumber is imported even though it isn't really required.
+
+2016-10-21  Kirit Sælensminde  <kirit@felspar.com>
+ * Split the middleware into two parts.
+ * Drop support for Django 1.0
+
+2015-08-20 Nui Narongwet <narongwet@proteus-tech.com>
+ Fix error if model has no record
+
+2015-08-18  Nui Narongwet <narongwet@proteus-tech.com>
+ Fix typos
+
+2015-08-12  Nui Narongwet <narongwet@proteus-tech.com>
+ Added async_monitor, monitor_model and monitor_service
+ Added ChangeSubscription model
+ Added callback_kwargs paramiter to api functions
+
+2015-06-21  Yothin Muangsommuk  <yothin@proteus-tech.com>
+ Extend the pull monitor APIs to have more control over how it starts and carries on
+
+2015-05-27  Kirit Sælensminde  <kirit@felspar.com>
+ Disabled the end-of-request data capture in the request log because it caused problems for Postgres' serialized isolation level on some machines.
+
 2015-05-23  Kirit Sælensminde  <kirit@felspar.com>
+ Support both early and late Django __unicode__/unicode methods.
  Allow the user model to be swapped out in more recent versions of Django.
  Use 2to3 on installation on Python 3 systems.
  Make print statements Python 3 compatible.

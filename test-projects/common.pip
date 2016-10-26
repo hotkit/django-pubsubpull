@@ -1,8 +1,9 @@
 simplejson
 
+django-async
+django-slumber
+
 # Used for testing
 coverage
 mock
-
-git+https://github.com/KayEss/django-async.git@develop
-git+https://github.com/KayEss/django-slumber.git@develop
+pylint

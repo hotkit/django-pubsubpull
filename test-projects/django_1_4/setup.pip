@@ -1,4 +1,4 @@
 django < 1.5
 south>1.0
 psycopg2
-django-nose
+django-nose == 1.4.3
